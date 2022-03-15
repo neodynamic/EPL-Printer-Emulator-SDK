@@ -1,0 +1,443 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EPLPrinter Emulator SDK - ASP.NET EPLViewer Sample</title>
+
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css" />
+
+    <style type="text/css">
+        .navbar-custom {
+            background-color: #A3A09A;
+            color: #fff;
+            border-radius: 0;
+        }
+
+            .navbar-custom .navbar-nav > li > a {
+                color: #fff;
+            }
+
+            .navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+                color: #ffffff;
+                background-color: transparent;
+            }
+
+            .navbar-custom .navbar-nav > li > a:hover, .nav > li > a:focus {
+                text-decoration: none;
+                background-color: #acdaee;
+            }
+
+            .navbar-custom .navbar-brand {
+                color: #eee;
+            }
+
+            .navbar-custom .navbar-toggle {
+                background-color: #eee;
+            }
+
+            .navbar-custom .icon-bar {
+                background-color: #acdaee;
+            }
+
+
+        .round.white {
+            background-color: #fff;
+            color: #2196F3
+        }
+
+        .round {
+            display: inline-block;
+            height: 64px;
+            width: 64px;
+            line-height: 64px;
+            -moz-border-radius: 32px;
+            border-radius: 32px;
+            background-color: #222;
+            color: #FFF;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <div class="round white">
+                        <img alt="Neodynamic" src="//www.neodynamic.com/images/EPLPrinterEmulatorSDK-32x32.png">
+                    </div>
+                </a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="//www.neodynamic.com/products/epl-printer-emulator-sdk/" target="_blank" class="navbar-brand">EPLPrinter Emulator SDK for .NET Standard</a>
+                <span class="label label-danger">Version 1.0</span>
+            </div>
+            <div class="navbar-collapse collapse">
+                <div class="pull-right">
+                    <a class="btn btn-info" href="//www.neodynamic.com/products/epl-printer-emulator-sdk/download/" target="_blank"><i class="glyphicon glyphicon-download-alt"></i> Download EPLPrinter Emulator SDK for .NET</a>
+                    
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class="container body-content">
+        <form id="formEPL" name="formEPL">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>EPL Printer Settings</h2>
+                    <div class="form-group well">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="lstPrinterDpi">DPI:</label>
+                                <select id="lstPrinterDpi" name="lstPrinterDpi" class="form-control input-sm">
+                                    <option>152 dpi (6 dpmm)</option>
+                                    <option selected>203 dpi (8 dpmm)</option>
+                                    <option>300 dpi (12 dpmm)</option>
+                                    <option>600 dpi (24 dpmm)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtLabelWidth">Label Width (inch):</label>
+                                <input type="number" class="form-control input-sm allow_decimal" id="txtLabelWidth" name="txtLabelWidth" value="4">
+                                <label><input id="chkForceLabelWidth" name="chkForceLabelWidth" type="checkbox"><strong><small>&nbsp;Force Label Width?</small></strong></label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtLabelHeight">Label Height (inch):</label>
+                                <input type="number" class="form-control input-sm allow_decimal" id="txtLabelHeight" name="txtLabelHeight" value="6">
+                                <label><input id="chkForceLabelHeight" name="chkForceLabelHeight" type="checkbox"><strong><small>&nbsp;Force Label Height?</small></strong></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="cpRibbonColor">Ribbon Color:</label>
+                                <input id="cpRibbonColor" name="cpRibbonColor" type="color" class="form-control input-sm" value="#000000">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="cpBackColor">Label BackColor:</label>
+                                <input id="cpBackColor" name="cpBackColor" type="color" class="form-control input-sm" value="#ffffff">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="checkbox">
+                                    <label><input id="chkAntialias" name="chkAntialias" type="checkbox" checked><strong><small>Apply Anti-Aliasing?</small></strong></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="lstOutputFormat">Output Format:</label>
+                                <select id="lstOutputFormat" name="lstOutputFormat" class="form-control input-sm">
+                                    <option value="PNG" selected>PNG</option>
+                                    <option value="JPG">JPG</option>
+                                    <option value="PDF">PDF</option>
+                                    <option value="PCX">PCX</option>
+                                    <option value="GRF">Zebra EPL GRF</option>
+                                    <option value="EPL">Zebra EPL Binary</option>
+                                    <option value="FP">Honeywell-Intermec FingerPrint Binary</option>
+                                    <option value="NV">EPSON ESC/POS NV Binary</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="lstOutputRotate">Rotate:</label>
+                                <select id="lstOutputRotate" name="lstOutputRotate" class="form-control input-sm">
+                                    <option selected>None</option>
+                                    <option>Rot90Clockwise</option>
+                                    <option>Rot180</option>
+                                    <option>Rot270Clockwise</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h2>EPL Commands</h2>
+                    <div class="form-group well">
+                        <textarea id="eplCommands" name="eplCommands" rows="6" cols="80" class="form-control input-sm" placeholder="Type or Paste EPL commands here..." style="font-family: monospace;min-width: 100%"></textarea>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="eplFile"><i class="glyphicon glyphicon-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;Open EPL file...</label>
+                                <input class="form-control input-sm" type="file" id="eplFile" onchange="readZplFile();">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="checkbox">
+                                    <label><input id="chkUTF8" name="chkUTF8" type="checkbox"><strong><small>Use UTF-8</small></strong></label>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <br />
+                                <button type="button" onclick="processEPL();" class="btn btn-danger"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Process &amp; Preview EPL...</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+
+                <h2>EPL Rendering Output</h2>
+                <div class="form-group well">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-info" onclick="prevLabelImage();"><i class="glyphicon glyphicon-triangle-left" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-md-10 text-center">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4 id="lblPreview"></h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 class=" pull-right">Rendered Elements:</h4>
+                                </div>
+                                <div class="col-md-5">
+                                    <select id="lstRenderedElements" class="form-control input-sm" onchange="highlightRenderedElement()"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-info pull-right" onclick="nextLabelImage();"><i class="glyphicon glyphicon-triangle-right" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="text-center">
+                        <img id="imgLabelPreview" />
+                        <canvas id="myCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="text-center">
+                <a class="btn btn-success btn-lg" href="//www.neodynamic.com/products/epl-printer-emulator-sdk/" target="_blank"><i class="glyphicon glyphicon-info-sign"></i> About EPLPrinter Emulator SDK for .NET</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-info btn-lg" href="//www.neodynamic.com/products/epl-printer-emulator-sdk/download/" target="_blank"><i class="glyphicon glyphicon-download-alt"></i> Download EPLPrinter Emulator SDK for .NET</a>
+            </div>
+            <hr />
+            <p>
+                Powered by <a href="//www.neodynamic.com/products/epl-printer-emulator-sdk/" target="_blank">EPLPrinter Emulator SDK for .NET</a>
+                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <i class="icon-user"></i> <a href="https://www.neodynamic.com/spport" target="_blank">Contact Tech Support</a>
+            </p>
+            <p>
+                &copy; Copyright
+                <script type="text/javascript">
+                    var theDate = new Date()
+                    document.write(theDate.getFullYear())
+                </script> - Neodynamic SRL<br /><a href="//www.neodynamic.com" alt="Neodynamic Website">https://www.neodynamic.com</a><br />All rights reserved.
+            </p>
+
+        </footer>
+    </div>
+
+    <div id="alertModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span class="label label-danger"><i class="glyphicon glyphicon-warning-sign"></i></span> Error</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="downloadModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span class="label label-primary"><i class="glyphicon glyphicon-info-sign"></i></span> Download</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p></p>
+                    <a id="outputDownload" href="#" target="_blank" class="btn btn-lg btn-info"><i class="glyphicon glyphicon-cloud-download"></i> Click here to download!</a>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+    <script>
+
+        var _image_icon = "no-image-placeholder.png";
+
+        var _image_processing = "gear.gif";
+
+        var _preview_title = "Label Preview";
+
+        $(function () {
+            $('.allow_decimal').on('input', function () {
+                match = (/(\d{0,2})[^.]*((?:\.\d{0,2})?)/g).exec(this.value.replace(/[^\d.]/g, ''));
+                this.value = match[1] + match[2];
+            });
+
+            $('#imgLabelPreview').attr("src", _image_icon);
+
+            $('#lblPreview').text(_preview_title);
+
+            //set sample EPL commands
+            $('#eplCommands').val('\x0AN\x0Aq609\x0AQ203,26\x0AB26,26,0,UA0,2,2,152,B,"603679025109"\x0AA253,26,0,3,1,1,N,"SKU 6205518 MFG 6354"\x0AA253,56,0,3,1,1,N,"2XIST TROPICAL BEACH"\x0AA253,86,0,3,1,1,N,"STRIPE SQUARE CUT TRUNK"\x0AA253,116,0,3,1,1,N,"BRICK"\x0AA253,146,0,3,1,1,N,"X-LARGE"\x0AP1\x0A');
+
+            processEPL();
+        });
+
+        var _epl_output_buffer = null;
+        var _this = this;
+
+        function processEPL() {
+            $('#imgLabelPreview').attr("src", _image_processing);
+            $('#lblPreview').text(_preview_title);
+            _currentLabelIndex = 0;
+            _maxNumOfLabels = 0;
+            _epl_output_buffer = null;
+
+            _this.fillRenderedElements();
+            _this.highlightRenderedElement();
+
+            $.post("ProcessEPL/ProcessRequest", $('#formEPL').serialize(), function (result) {
+                if (JSON) {
+                    try {
+                        _epl_output_buffer = result;
+                        if (_epl_output_buffer.error) {
+                            $('#imgLabelPreview').attr("src", _image_icon);
+                            myAlert(_epl_output_buffer.error)
+                        } else if (_epl_output_buffer.labelImages) {
+                            _currentLabelIndex = 0;
+                            _maxNumOfLabels = _epl_output_buffer.labelImages.length;
+                            _this.showLabelImage();
+                        } else if (_epl_output_buffer.labelPDF) {
+                            $('#imgLabelPreview').attr("src", _image_icon);
+                            myDownload("The specified EPL commands were converted to PDF successfully.", "epl-labels.pdf", _epl_output_buffer.labelPDF);
+                        } else if (_epl_output_buffer.labelBinaries) {
+                            $('#imgLabelPreview').attr("src", _image_icon);
+                            myDownload("The specified EPL commands were converted to " + $('#lstOutputFormat').val() + " successfully.", (_epl_output_buffer.labelBinaries.indexOf('application/octet-stream') > 0 ? "epl-labels." + $('#lstOutputFormat').val() : "epl-labels.zip"), _epl_output_buffer.labelBinaries);
+                        }
+                    } catch (e) {
+                        $('#imgLabelPreview').attr("src", _image_icon);
+                        myAlert(e.message);
+                    }
+                }
+
+            }, "json");
+        }
+
+        var _currentLabelIndex = 0;
+        var _maxNumOfLabels = 0;
+
+        function showLabelImage() {
+            if (_epl_output_buffer && _epl_output_buffer.labelImages) {
+                $('#lblPreview').text("Label " + (_currentLabelIndex + 1) + " of " + _maxNumOfLabels);
+                $('#imgLabelPreview').attr("src", _epl_output_buffer.labelImages[_currentLabelIndex]);
+                fillRenderedElements();
+                highlightRenderedElement();
+            }
+        }
+
+        function nextLabelImage() {
+            if (_currentLabelIndex < _maxNumOfLabels - 1) {
+                _currentLabelIndex++;
+                showLabelImage();
+            }
+        }
+
+        function prevLabelImage() {
+            if (_currentLabelIndex > 0) {
+                _currentLabelIndex--;
+                showLabelImage();
+            }
+        }
+
+        function fillRenderedElements() {
+            $('#lstRenderedElements').empty();
+
+            if (_epl_output_buffer && _epl_output_buffer.renderedElements) {
+                var eplElems = _epl_output_buffer.renderedElements[_currentLabelIndex];
+
+                if (eplElems && eplElems.length > 0) {
+                    $('#lstRenderedElements').append('<option></option>');
+                    for (var i = 0; i < eplElems.length; i++) {
+                        var eplEl = eplElems[i];
+                        $('#lstRenderedElements').append('<option>^' + eplEl.name + (eplEl.content.trim().length > 0 ? ': `' + eplEl.content.trim() + '`' : '') + '</option>');
+                    }
+                }
+            }
+        }
+
+        function highlightRenderedElement() {
+            var img = document.getElementById("imgLabelPreview");
+            var cnvs = document.getElementById("myCanvas");
+
+            cnvs.style.position = "absolute";
+            cnvs.style.left = img.offsetLeft + "px";
+            cnvs.style.top = img.offsetTop + "px";
+            cnvs.width = img.offsetWidth;
+            cnvs.height = img.offsetHeight;
+
+            var ctx = cnvs.getContext("2d");
+            ctx.clearRect(0, 0, cnvs.width, cnvs.height);
+
+            if (_epl_output_buffer && _epl_output_buffer.renderedElements) {
+                var eplElems = _epl_output_buffer.renderedElements[_currentLabelIndex];
+
+                if (eplElems && eplElems.length > 0) {
+                    var lst = document.getElementById("lstRenderedElements");
+                    var eplEl = eplElems[lst.selectedIndex - 1];
+                    if (eplEl && eplEl.x) {
+                        ctx.fillStyle = 'rgba(255,69,0,0.5)';
+                        ctx.fillRect(eplEl.x, eplEl.y, eplEl.width, eplEl.height);
+                    }
+                }
+            }
+        }
+
+        function readZplFile() {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#eplCommands').val(reader.result);
+            };
+            var file = $('#eplFile')[0].files[0];
+            reader.readAsText(file);
+        }
+
+        function myAlert(msg) {
+            $('#alertModal').find('.modal-body p').text(msg);
+            $('#alertModal').modal('show')
+        }
+
+        function myDownload(msg, downloadFileName, downloadContent) {
+            $('#outputDownload').attr('download', downloadFileName);
+            $('#outputDownload').attr('href', downloadContent);
+            $('#downloadModal').find('.modal-body p').text(msg);
+            $('#downloadModal').modal('show')
+        }
+
+    </script>
+
+</body>
+</html>
