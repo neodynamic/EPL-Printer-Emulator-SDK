@@ -49,8 +49,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Neodynamic.SDK.EPLPrinter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a2a592c6d0ea6158, processorArchitecture=MSIL">
-      <HintPath>packages\Neodynamic.SDK.EPLPrinter.1.0.0\lib\netstandard2.0\Neodynamic.SDK.EPLPrinter.dll</HintPath>
+    <Reference Include="Neodynamic.SDK.EPLPrinter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a2a592c6d0ea6158, processorArchitecture=MSIL">
+      <HintPath>packages\Neodynamic.SDK.EPLPrinter.2.0.0\lib\netstandard2.0\Neodynamic.SDK.EPLPrinter.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
