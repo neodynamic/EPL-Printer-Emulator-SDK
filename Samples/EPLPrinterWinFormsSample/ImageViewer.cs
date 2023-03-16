@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,6 +22,8 @@ namespace EPLPrinterWinFormsSample
         public ImageViewer()
         {
             InitializeComponent();
+
+            this.panelElem.BackColor = Color.FromArgb(128, Color.DeepSkyBlue);
         }
 
         string[] imgFiles = null;
@@ -29,7 +31,7 @@ namespace EPLPrinterWinFormsSample
         {
             _eplPrinter = eplPrinter;
 
-            picLabel.Image = null;
+            panelLabel.BackgroundImage = null;
 
             if (Directory.Exists(folder))
             {
@@ -44,11 +46,20 @@ namespace EPLPrinterWinFormsSample
 
         public void RefreshImage()
         {
+            panelElem.Visible = false;
+
             iPages = imgFiles.Length;
             btnNext.Visible = btnPrev.Visible = cmdNext.Visible = cmdPrev.Visible = (iPages > 1);
             lblNumOfLabels.Text = "Label " + iCurrPage.ToString() + " of " + iPages.ToString();
             using (FileStream fs = new FileStream(imgFiles[iCurrPage - 1], FileMode.Open, FileAccess.Read))
-                picLabel.Image = Image.FromStream(fs);
+                panelLabel.BackgroundImage = Image.FromStream(fs);
+
+            if (panelLabel.BackgroundImage != null)
+            {
+                panelLabel.Width = panelLabel.BackgroundImage.Width;
+                panelLabel.Height = panelLabel.BackgroundImage.Height;
+            }
+
             this.SetImageLocation();
 
             // display rendered elements if any
@@ -63,8 +74,8 @@ namespace EPLPrinterWinFormsSample
 
         }
 
-        public void Clear() { 
-            if (picLabel.Image != null) picLabel.Image.Dispose();
+        public void Clear() {
+            if (panelLabel.BackgroundImage != null) panelLabel.BackgroundImage.Dispose();
 
             this.lstEPLElements.Items.Clear();
         }
@@ -92,25 +103,25 @@ namespace EPLPrinterWinFormsSample
             int x = 0;
             int y = 0;
 
-            if (picLabel.Width > pnlContainer.ClientRectangle.Width)
+            if (panelLabel.Width > pnlContainer.ClientRectangle.Width)
             {
                 x = 0;
             }
             else
             {
-                x = (pnlContainer.ClientRectangle.Width - picLabel.Width) / 2;
+                x = (pnlContainer.ClientRectangle.Width - panelLabel.Width) / 2;
             }
 
-            if (picLabel.Height > pnlContainer.ClientRectangle.Height)
+            if (panelLabel.Height > pnlContainer.ClientRectangle.Height)
             {
                 y = 0;
             }
             else
             {
-                y = (pnlContainer.ClientRectangle.Height - picLabel.Height) / 2;
+                y = (pnlContainer.ClientRectangle.Height - panelLabel.Height) / 2;
             }
 
-            picLabel.Location = new Point(x, y);
+            panelLabel.Location = new Point(x, y);
         }
 
         private void lstEPLElements_SelectedIndexChanged(object sender, EventArgs e)
@@ -125,22 +136,12 @@ namespace EPLPrinterWinFormsSample
 
         private void HighlightEplElem(EPLElement eplElem)
         {
-            using (FileStream fs = new FileStream(imgFiles[iCurrPage - 1], FileMode.Open, FileAccess.Read))
-            {
-                var imgLabel = Image.FromStream(fs);
+            this.panelElem.Visible = (eplElem != null);
 
-                if (eplElem != null)
-                {
-                    using (var gfx = Graphics.FromImage(imgLabel))
-                    {
-                        using (var brush = new SolidBrush(Color.FromArgb(128, Color.DeepSkyBlue)))
-                        {
-                            gfx.FillRectangle(brush, new Rectangle(eplElem.X, eplElem.Y, eplElem.Width, eplElem.Height));
-                        }
-                    }
-                }
-                picLabel.Image = imgLabel;
-                this.SetImageLocation();
+            if (eplElem != null)
+            {
+                this.panelElem.Location = new Point(eplElem.X, eplElem.Y);
+                this.panelElem.Size = new Size(eplElem.Width, eplElem.Height);
             }
         }
 
