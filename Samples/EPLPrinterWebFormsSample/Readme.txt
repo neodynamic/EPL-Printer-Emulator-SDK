@@ -1,4 +1,4 @@
-EPLPrinter Emulator SDK 1.0 for .NET Standard
+EPLPrinter Emulator SDK 2.0 for .NET Standard
 =============================================
 
 1. Product details at https://neodynamic.com/products/epl-printer-emulator-sdk
