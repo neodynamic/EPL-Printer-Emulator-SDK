@@ -35,14 +35,14 @@ namespace EPLPrinterAspNetCoreSample.Controllers
             string cpBackColor = _ctx.Request.Form["cpBackColor"];
             string lstOutputFormat = _ctx.Request.Form["lstOutputFormat"];
             string lstOutputRotate = _ctx.Request.Form["lstOutputRotate"];
-            string eplCommands = _ctx.Request.Form["eplCommands"];
+            string rawEplCommands = _ctx.Request.Form["rawEplCommands"];
 
             var json = new StringBuilder();
             json.Append("{");
 
             try
             {
-                if (string.IsNullOrEmpty(eplCommands)) throw new ArgumentException("Please specify some EPL commands.");
+                if (string.IsNullOrEmpty(rawEplCommands)) throw new ArgumentException("Please specify some EPL commands.");
 
 
                 //Create an instance of EPLPrinter class
@@ -72,7 +72,9 @@ namespace EPLPrinterAspNetCoreSample.Controllers
                     //Set text encoding
                     Encoding enc = (_ctx.Request.Form["chkUTF8"].Count > 0 ? Encoding.UTF8 : Encoding.GetEncoding(850));
 
-                    var buffer = eplPrinter.ProcessCommands(eplCommands, enc, true);
+                    var rawCommands = Convert.FromBase64String(rawEplCommands);
+
+                    var buffer = eplPrinter.ProcessCommands(rawCommands, enc, true);
 
                     // the buffer variable contains the binary output of the EPL rendering result
                     // The format of this buffer depends on the RenderOutputFormat property setting
