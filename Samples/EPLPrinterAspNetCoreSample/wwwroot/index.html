@@ -74,7 +74,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href="//www.neodynamic.com/products/epl-printer-emulator-sdk/" target="_blank" class="navbar-brand">EPLPrinter Emulator SDK for .NET Standard</a>
-                <span class="label label-danger">Version 2.0</span>
+                <span class="label label-danger">Version 3.0</span>
             </div>
             <div class="navbar-collapse collapse">
                 <div class="pull-right">
@@ -162,10 +162,11 @@
                     <h2>EPL Commands</h2>
                     <div class="form-group well">
                         <textarea id="eplCommands" name="eplCommands" rows="6" cols="80" class="form-control input-sm" placeholder="Type or Paste EPL commands here..." style="font-family: monospace;min-width: 100%"></textarea>
+                        <input id="rawEplCommands" name="rawEplCommands" type="hidden" />
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="eplFile"><i class="glyphicon glyphicon-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;Open EPL file...</label>
-                                <input class="form-control input-sm" type="file" id="eplFile" onchange="readZplFile();">
+                                <input class="form-control input-sm" type="file" id="eplFile" onchange="readEplFile();">
                             </div>
                             <div class="col-md-3">
                                 <div class="checkbox">
@@ -291,6 +292,8 @@
 
         var _preview_title = "Label Preview";
 
+        var _raw_epl_buffer = null;
+
         $(function () {
             $('.allow_decimal').on('input', function () {
                 match = (/(\d{0,2})[^.]*((?:\.\d{0,2})?)/g).exec(this.value.replace(/[^\d.]/g, ''));
@@ -302,7 +305,10 @@
             $('#lblPreview').text(_preview_title);
 
             //set sample EPL commands
-            $('#eplCommands').val('\x0AN\x0Aq609\x0AQ203,26\x0AB26,26,0,UA0,2,2,152,B,"603679025109"\x0AA253,26,0,3,1,1,N,"SKU 6205518 MFG 6354"\x0AA253,56,0,3,1,1,N,"2XIST TROPICAL BEACH"\x0AA253,86,0,3,1,1,N,"STRIPE SQUARE CUT TRUNK"\x0AA253,116,0,3,1,1,N,"BRICK"\x0AA253,146,0,3,1,1,N,"X-LARGE"\x0AP1\x0A');
+            let eplSample = '\x0AN\x0Aq609\x0AQ203,26\x0AB26,26,0,UA0,2,2,152,B,"603679025109"\x0AA253,26,0,3,1,1,N,"SKU 6205518 MFG 6354"\x0AA253,56,0,3,1,1,N,"2XIST TROPICAL BEACH"\x0AA253,86,0,3,1,1,N,"STRIPE SQUARE CUT TRUNK"\x0AA253,116,0,3,1,1,N,"BRICK"\x0AA253,146,0,3,1,1,N,"X-LARGE"\x0AP1\x0A';
+            $('#eplCommands').val(eplSample);
+            _raw_epl_buffer = (new TextEncoder().encode(eplSample));
+            $('#rawEplCommands').val(btoa(String.fromCharCode.apply(null, _raw_epl_buffer)));
 
             processEPL();
         });
@@ -416,13 +422,16 @@
             }
         }
 
-        function readZplFile() {
+        function readEplFile() {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#eplCommands').val(reader.result);
+                _raw_epl_buffer = new Uint8Array(reader.result);
+                let txtDec = new TextDecoder();
+                $('#eplCommands').val(txtDec.decode(_raw_epl_buffer));
+                $('#rawEplCommands').val(btoa(String.fromCharCode.apply(null, _raw_epl_buffer)));
             };
             var file = $('#eplFile')[0].files[0];
-            reader.readAsText(file);
+            reader.readAsArrayBuffer(file);
         }
 
         function myAlert(msg) {
