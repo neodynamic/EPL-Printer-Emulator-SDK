@@ -20,7 +20,8 @@ public class ProcessEPL : IHttpHandler
         string cpBackColor = context.Request["cpBackColor"];
         string lstOutputFormat = context.Request["lstOutputFormat"];
         string lstOutputRotate = context.Request["lstOutputRotate"];
-        string eplCommands = context.Request["eplCommands"];
+        string rawEplCommands = context.Request["rawEplCommands"];
+
 
         var json = new StringBuilder();
         json.Append("{");
@@ -28,7 +29,7 @@ public class ProcessEPL : IHttpHandler
         try
         {
 
-            if (string.IsNullOrEmpty(eplCommands)) throw new ArgumentException("Please specify some EPL commands.");
+            if (string.IsNullOrEmpty(rawEplCommands)) throw new ArgumentException("Please specify some EPL commands.");
 
             //Create an instance of EPLPrinter class
             using (var eplPrinter = new EPLPrinter("LICENSE OWNER", "LICENSE KEY"))
@@ -57,7 +58,9 @@ public class ProcessEPL : IHttpHandler
                 //Set text encoding
                 Encoding enc = (context.Request["chkUTF8"] != null ? Encoding.UTF8 : Encoding.GetEncoding(850));
 
-                var buffer = eplPrinter.ProcessCommands(eplCommands, enc, true);
+                var rawCommands = Convert.FromBase64String(rawEplCommands);
+
+                var buffer = eplPrinter.ProcessCommands(rawCommands, enc, true);
 
                 // the buffer variable contains the binary output of the EPL rendering result
                 // The format of this buffer depends on the RenderOutputFormat property setting
