@@ -310,6 +310,11 @@
             _raw_epl_buffer = (new TextEncoder().encode(eplSample));
             $('#rawEplCommands').val(btoa(String.fromCharCode.apply(null, _raw_epl_buffer)));
 
+            $('#eplCommands').bind('input propertychange', function () {
+                _raw_epl_buffer = (new TextEncoder().encode($(this).val()));
+                $('#rawEplCommands').val(btoa(String.fromCharCode.apply(null, _raw_epl_buffer)));
+            });
+            
             processEPL();
         });
 
